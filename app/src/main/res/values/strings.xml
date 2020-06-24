@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Weather App</string>
+    <string name="city">Shanghai</string>
+    <string name="date">Monday 27th, April</string>
+    <string name="time">11:35</string>
+    <string name="temperature">+18 \u2103</string>
+</resources>

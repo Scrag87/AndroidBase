@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="match_parent">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="409dp"
+            android:layout_height="729dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="1dp"
+            android:layout_marginStart="1dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="1dp"
+            android:layout_marginRight="1dp" android:layout_marginTop="1dp" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginBottom="1dp" app:layout_constraintBottom_toBottomOf="parent">
+        <Switch
+                android:textOff="C"
+                android:textOn="F"
+                android:paddingTop="150dp"
+                android:paddingLeft="40dp"
+                android:paddingRight="40dp"
+                android:paddingBottom="40dp"
+                android:text="Temperature"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/settings_switch_temperature"/>
+        <Switch
+                android:textOff="m/s"
+                android:textOn="km/h"
+                android:padding="40dp"
+                android:text="Wind Speed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/settings_switch_wind_speed"/>
+        <Switch
+                android:textOff="mmHg"
+                android:textOn="hPa"
+                android:padding="40dp"
+                android:text="Pressure"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/settings_switch_pressure"/>
+        <Spinner
+                android:padding="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/settings_spinner_location"/>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

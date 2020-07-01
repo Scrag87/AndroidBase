@@ -19,21 +19,21 @@
                 android:paddingLeft="40dp"
                 android:paddingRight="40dp"
                 android:paddingBottom="40dp"
-                android:text="Temperature"
+                android:text="Temperature C - F"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/settings_switch_temperature"/>
         <Switch
                 android:textOff="m/s"
                 android:textOn="km/h"
                 android:padding="40dp"
-                android:text="Wind Speed"
+                android:text="Wind Speed m/s - km/h"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/settings_switch_wind_speed"/>
         <Switch
                 android:textOff="mmHg"
                 android:textOn="hPa"
                 android:padding="40dp"
-                android:text="Pressure"
+                android:text="Pressure mmHg - hPa"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/settings_switch_pressure"/>
         <Spinner

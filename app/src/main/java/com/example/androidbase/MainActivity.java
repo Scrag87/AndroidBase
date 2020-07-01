@@ -1,6 +1,7 @@
 package com.example.androidbase;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,14 +15,121 @@ public class MainActivity extends AppCompatActivity {
   ImageView menu_button;
   ImageView settings_button;
   Switch switch1;
+  String instanceState;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    mainActivity();
-   // menu();
-   // settings();
+    // mainActivity();
+    // menu();
+    settings();
+    if (savedInstanceState == null) {
+      instanceState = "Первый запуск!";
+    } else {
+      instanceState = "Повторный запуск!";
+    }
+    Toast.makeText(getApplicationContext(), instanceState + " - onCreate()", Toast.LENGTH_SHORT)
+        .show();
+    Log.d(this.getClass().getName() , "onCreate");
+  }
 
+  @Override
+  protected void onStart() {
+    super.onStart();
+    Toast.makeText(getApplicationContext(), "onStart()", Toast.LENGTH_SHORT).show();
+    Log.d(this.getClass().getName() , "onStart");
+  }
+
+  @Override
+  protected void onRestoreInstanceState(Bundle saveInstanceState) {
+    super.onRestoreInstanceState(saveInstanceState);
+    restoreSettings();
+    Toast.makeText(getApplicationContext(), " onRestoreInstanceState()", Toast.LENGTH_SHORT).show();
+    Log.d(this.getClass().getName() , "onRestoreInstanceState");
+  }
+
+  private void restoreSettings() {
+   Log.d("restoreSettings()before" , Settings.getInstance().toString());
+    ((Switch) findViewById(R.id.settings_switch_wind_speed)).setChecked(Settings.getInstance().isWindspeedInMph());
+    ((Switch) findViewById(R.id.settings_switch_pressure)).setChecked(Settings.getInstance().isPressureInPascal());
+    ((Switch) findViewById(R.id.settings_switch_temperature)).setChecked(Settings.getInstance().isTemperatureInF());
+    ((Spinner) (findViewById(R.id.settings_spinner_location))).setSelection(Settings.getInstance().getLocation());
+    Log.d("restoreSettings()after" , Settings.getInstance().toString());
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    Toast.makeText(getApplicationContext(), "onResume()", Toast.LENGTH_SHORT).show();
+    Log.d(this.getClass().getName() , "onResume");
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    Toast.makeText(getApplicationContext(), "onPause()", Toast.LENGTH_SHORT).show();
+    Log.d(this.getClass().getName() , "onPause");
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle saveInstanceState) {
+    super.onSaveInstanceState(saveInstanceState);
+    saveSettings();
+    Toast.makeText(getApplicationContext(), "onSaveInstanceState()", Toast.LENGTH_SHORT).show();
+    Log.d(this.getClass().getName() , "onSaveInstanceState");
+  }
+
+  private void saveSettings() {
+
+    /*
+      saveSettings()-before: Settings{temperatureInF=true, windspeedInMph=false, pressureInPascal=false, location=0}
+      saveSettings()-after: Settings{temperatureInF=true, windspeedInMph=false, pressureInPascal=false, location=2}
+      restoreSettings()before: Settings{temperatureInF=true, windspeedInMph=false, pressureInPascal=false, location=2}
+      restoreSettings()after: Settings{temperatureInF=true, windspeedInMph=false, pressureInPascal=false, location=2}
+    */
+
+    Log.d("saveSettings()-before " , Settings.getInstance().toString());
+    Settings.getInstance()
+        .setWindspeedInMph(((Switch) findViewById(R.id.settings_switch_wind_speed)).isChecked());
+    Settings.getInstance()
+        .setTemperatureInF(((Switch) findViewById(R.id.settings_switch_temperature)).isChecked());
+    Settings.getInstance()
+        .setPressureInPascal(((Switch) findViewById(R.id.settings_switch_pressure)).isChecked());
+    Spinner spinner = findViewById(R.id.settings_spinner_location);
+    Settings.getInstance().setLocation(getIndexByString(spinner,spinner.getSelectedItem().toString()));
+    Log.d("saveSettings()-after " , Settings.getInstance().toString());
+  }
+
+  private int getIndexByString(Spinner spinner, String string) {
+    int index = 0;
+    for (int i = 0; i < spinner.getCount(); i++) {
+      if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(string)) {
+        index = i;
+        break;
+      }
+    }
+    return index;
+  }
+
+  @Override
+  protected void onStop() {
+    super.onStop();
+    Toast.makeText(getApplicationContext(), "onStop()", Toast.LENGTH_SHORT).show();
+    Log.d(this.getClass().getName() , "onStop");
+  }
+
+  @Override
+  protected void onRestart() {
+    super.onRestart();
+    Toast.makeText(getApplicationContext(), "onRestart()", Toast.LENGTH_SHORT).show();
+    Log.d(this.getClass().getName() , "onRestart");
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    Toast.makeText(getApplicationContext(), "onDestroy()", Toast.LENGTH_SHORT).show();
+    Log.d(this.getClass().getName() , "onDestroy");
   }
 
   private void menu() {
@@ -33,7 +141,9 @@ public class MainActivity extends AppCompatActivity {
 
     Spinner spinner = findViewById(R.id.settings_spinner_location);
     // Create an ArrayAdapter using the string array and a default spinner layout
-    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.planets_array, android.R.layout.simple_spinner_item);
+    ArrayAdapter<CharSequence> adapter =
+        ArrayAdapter.createFromResource(
+            this, R.array.planets_array, android.R.layout.simple_spinner_item);
     // Specify the layout to use when the list of choices appears
     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     // Apply the adapter to the spinner

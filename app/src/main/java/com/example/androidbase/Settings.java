@@ -1,18 +1,29 @@
 package com.example.androidbase;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Settings {
   private static Settings uniqueInstance;
   private boolean temperatureInF;
   private boolean windspeedInMph;
   private boolean pressureInPascal;
   private Integer location;
+  private final Map<Integer, String> locationMap;
+
+
+  public Map<Integer, String> getLocationMap() {
+    return locationMap;
+  }
+
 
   public Integer getLocation() {
     return location;
   }
 
-  public void setLocation(Integer location) {
+  public void setLocation(Integer location , String locationName) {
     this.location = location;
+    this.locationMap.put(location,locationName);
   }
 
   public boolean isTemperatureInF() {
@@ -39,7 +50,13 @@ public class Settings {
     this.pressureInPascal = pressureInPascal;
   }
 
-  private Settings() {}
+  private Settings() {
+    this.temperatureInF = false;
+    this.windspeedInMph = false;
+    this.pressureInPascal = false;
+    this.location =1;
+    this.locationMap = new HashMap<>();
+  }
 
   public static synchronized Settings getInstance() {
     if (uniqueInstance == null) {
@@ -48,13 +65,18 @@ public class Settings {
     return uniqueInstance;
   }
 
+
   @Override
   public String toString() {
-    return "Settings{" +
-            "temperatureInF=" + temperatureInF +
-            ", windspeedInMph=" + windspeedInMph +
-            ", pressureInPascal=" + pressureInPascal +
-            ", location=" + location +
-            '}';
+    return "Settings{"
+        + "temperatureInF="
+        + temperatureInF
+        + ", windspeedInMph="
+        + windspeedInMph
+        + ", pressureInPascal="
+        + pressureInPascal
+        + ", location="
+        + location
+        + '}';
   }
 }

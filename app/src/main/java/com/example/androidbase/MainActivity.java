@@ -1,5 +1,7 @@
 package com.example.androidbase;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,18 +13,20 @@ public class MainActivity extends AppCompatActivity {
   TextView date;
   TextView city;
   TextView current_temperature;
+  TextView current_temperature_unit;
   ImageView current_weather_icon;
   ImageView menu_button;
   ImageView settings_button;
   Switch switch1;
   String instanceState;
+  Settings instance = Settings.getInstance();
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    // mainActivity();
-    // menu();
-    settings();
+    mainActivity();
+    fillMap();
+    setParams();
     if (savedInstanceState == null) {
       instanceState = "Первый запуск!";
     } else {
@@ -30,136 +34,116 @@ public class MainActivity extends AppCompatActivity {
     }
     Toast.makeText(getApplicationContext(), instanceState + " - onCreate()", Toast.LENGTH_SHORT)
         .show();
-    Log.d(this.getClass().getName() , "onCreate");
+    Log.d(this.getClass().getName(), "onCreate");
+  }
+
+  private void setParams() {
+    if (Settings.getInstance().isTemperatureInF()) {
+      current_temperature_unit.setText("\u2109");
+    } else {
+      current_temperature_unit.setText("\u2103");
+    }
+  }
+
+  private void fillMap() {
+    String[] locations = getResources().getStringArray(R.array.locations_array);
+    for (int i = 0; i < locations.length; i++) {
+      Settings.getInstance().setLocation(i, locations[i]);
+    }
   }
 
   @Override
   protected void onStart() {
     super.onStart();
     Toast.makeText(getApplicationContext(), "onStart()", Toast.LENGTH_SHORT).show();
-    Log.d(this.getClass().getName() , "onStart");
+    Log.d(this.getClass().getName(), "onStart");
   }
 
   @Override
   protected void onRestoreInstanceState(Bundle saveInstanceState) {
     super.onRestoreInstanceState(saveInstanceState);
     restoreSettings();
+
     Toast.makeText(getApplicationContext(), " onRestoreInstanceState()", Toast.LENGTH_SHORT).show();
-    Log.d(this.getClass().getName() , "onRestoreInstanceState");
+    Log.d(this.getClass().getName(), "onRestoreInstanceState");
   }
 
   private void restoreSettings() {
-   Log.d("restoreSettings()before" , Settings.getInstance().toString());
-    ((Switch) findViewById(R.id.settings_switch_wind_speed)).setChecked(Settings.getInstance().isWindspeedInMph());
-    ((Switch) findViewById(R.id.settings_switch_pressure)).setChecked(Settings.getInstance().isPressureInPascal());
-    ((Switch) findViewById(R.id.settings_switch_temperature)).setChecked(Settings.getInstance().isTemperatureInF());
-    ((Spinner) (findViewById(R.id.settings_spinner_location))).setSelection(Settings.getInstance().getLocation());
-    Log.d("restoreSettings()after" , Settings.getInstance().toString());
+    Log.d("restoreSettings()before", Settings.getInstance().toString());
+    ((Switch) findViewById(R.id.settings_switch_wind_speed))
+        .setChecked(Settings.getInstance().isWindspeedInMph());
+    ((Switch) findViewById(R.id.settings_switch_pressure))
+        .setChecked(Settings.getInstance().isPressureInPascal());
+    ((Switch) findViewById(R.id.settings_switch_temperature))
+        .setChecked(Settings.getInstance().isTemperatureInF());
+    ((Spinner) (findViewById(R.id.settings_spinner_location)))
+        .setSelection(Settings.getInstance().getLocation());
+    Log.d("restoreSettings()after", Settings.getInstance().toString());
   }
 
   @Override
   protected void onResume() {
     super.onResume();
+    setParams();
+    city.setText(instance.getLocationMap().get(instance.getLocation()));
     Toast.makeText(getApplicationContext(), "onResume()", Toast.LENGTH_SHORT).show();
-    Log.d(this.getClass().getName() , "onResume");
+    Log.d(this.getClass().getName(), "onResume");
   }
 
   @Override
   protected void onPause() {
     super.onPause();
     Toast.makeText(getApplicationContext(), "onPause()", Toast.LENGTH_SHORT).show();
-    Log.d(this.getClass().getName() , "onPause");
+    Log.d(this.getClass().getName(), "onPause");
   }
 
   @Override
   protected void onSaveInstanceState(Bundle saveInstanceState) {
     super.onSaveInstanceState(saveInstanceState);
-    saveSettings();
+    //    saveSettings();
     Toast.makeText(getApplicationContext(), "onSaveInstanceState()", Toast.LENGTH_SHORT).show();
-    Log.d(this.getClass().getName() , "onSaveInstanceState");
-  }
-
-  private void saveSettings() {
-
-    /*
-      saveSettings()-before: Settings{temperatureInF=true, windspeedInMph=false, pressureInPascal=false, location=0}
-      saveSettings()-after: Settings{temperatureInF=true, windspeedInMph=false, pressureInPascal=false, location=2}
-      restoreSettings()before: Settings{temperatureInF=true, windspeedInMph=false, pressureInPascal=false, location=2}
-      restoreSettings()after: Settings{temperatureInF=true, windspeedInMph=false, pressureInPascal=false, location=2}
-    */
-
-    Log.d("saveSettings()-before " , Settings.getInstance().toString());
-    Settings.getInstance()
-        .setWindspeedInMph(((Switch) findViewById(R.id.settings_switch_wind_speed)).isChecked());
-    Settings.getInstance()
-        .setTemperatureInF(((Switch) findViewById(R.id.settings_switch_temperature)).isChecked());
-    Settings.getInstance()
-        .setPressureInPascal(((Switch) findViewById(R.id.settings_switch_pressure)).isChecked());
-    Spinner spinner = findViewById(R.id.settings_spinner_location);
-    Settings.getInstance().setLocation(getIndexByString(spinner,spinner.getSelectedItem().toString()));
-    Log.d("saveSettings()-after " , Settings.getInstance().toString());
-  }
-
-  private int getIndexByString(Spinner spinner, String string) {
-    int index = 0;
-    for (int i = 0; i < spinner.getCount(); i++) {
-      if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(string)) {
-        index = i;
-        break;
-      }
-    }
-    return index;
+    Log.d(this.getClass().getName(), "onSaveInstanceState");
   }
 
   @Override
   protected void onStop() {
     super.onStop();
     Toast.makeText(getApplicationContext(), "onStop()", Toast.LENGTH_SHORT).show();
-    Log.d(this.getClass().getName() , "onStop");
+    Log.d(this.getClass().getName(), "onStop");
   }
 
   @Override
   protected void onRestart() {
     super.onRestart();
     Toast.makeText(getApplicationContext(), "onRestart()", Toast.LENGTH_SHORT).show();
-    Log.d(this.getClass().getName() , "onRestart");
+    Log.d(this.getClass().getName(), "onRestart");
   }
 
   @Override
   protected void onDestroy() {
     super.onDestroy();
     Toast.makeText(getApplicationContext(), "onDestroy()", Toast.LENGTH_SHORT).show();
-    Log.d(this.getClass().getName() , "onDestroy");
+    Log.d(this.getClass().getName(), "onDestroy");
   }
 
   private void menu() {
     setContentView(R.layout.menu);
   }
 
-  private void settings() {
-    setContentView(R.layout.settings);
-
-    Spinner spinner = findViewById(R.id.settings_spinner_location);
-    // Create an ArrayAdapter using the string array and a default spinner layout
-    ArrayAdapter<CharSequence> adapter =
-        ArrayAdapter.createFromResource(
-            this, R.array.planets_array, android.R.layout.simple_spinner_item);
-    // Specify the layout to use when the list of choices appears
-    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    // Apply the adapter to the spinner
-    spinner.setAdapter(adapter);
-  }
-
   private void mainActivity() {
     setContentView(R.layout.activity_main);
+
     currentTime = findViewById(R.id.time);
     date = findViewById(R.id.date);
     city = findViewById(R.id.city);
     current_temperature = findViewById(R.id.current_temperature);
+    current_temperature_unit = findViewById(R.id.temperature_unit);
     current_weather_icon = findViewById(R.id.current_weather_icon);
     menu_button = findViewById(R.id.menu_button);
     settings_button = findViewById(R.id.settings_button);
     switch1 = findViewById(R.id.switch1);
+
+    city.setText(instance.getLocationMap().get(instance.getLocation()));
   }
 
   public void switchClickToChangeTheme(View view) {
@@ -187,5 +171,20 @@ public class MainActivity extends AppCompatActivity {
       default:
         // code block
     }
+  }
+
+  public void openSettingsActivity(View view) {
+    Intent intent = new Intent(this, SettingsActivity.class);
+    startActivity(intent);
+  }
+
+  public void getTheWeather(View view) {
+    // https://yandex.com/weather/almaty
+    TextView city = findViewById(R.id.city);
+    Intent browser =
+        new Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("https://yandex.com/weather/" + city.getText().toString().toLowerCase()));
+    startActivity(browser);
   }
 }

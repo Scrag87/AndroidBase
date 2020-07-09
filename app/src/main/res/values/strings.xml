@@ -3,7 +3,8 @@
     <string name="city">Shanghai</string>
     <string name="date">Monday 27th, April</string>
     <string name="time">11:35</string>
-    <string name="temperature">+18 \u2103</string>
+    <string name="temperature">+18</string>
+    <string name="temperature_unit">\u2103</string>
     <string name="cloud">cloud weather</string>
     <string name="menu">menu</string>
     <string name="settings">settings</string>

@@ -4,10 +4,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Settings {
-  private static Settings uniqueInstance;
+  private static volatile Settings uniqueInstance;
   private boolean temperatureInF;
   private boolean windspeedInMph;
   private boolean pressureInPascal;
+  private ThemeColor themeColor;
+
+  public ThemeColor getThemeColor() {
+    return themeColor;
+  }
+
+  public void setThemeColor(ThemeColor themeColor) {
+    this.themeColor = themeColor;
+  }
+
   private Integer location;
   private final Map<Integer, String> locationMap;
 
@@ -51,11 +61,12 @@ public class Settings {
   }
 
   private Settings() {
-    this.temperatureInF = false;
+    this.temperatureInF = true;
     this.windspeedInMph = false;
     this.pressureInPascal = false;
-    this.location =1;
+    this.location = 0;
     this.locationMap = new HashMap<>();
+    this.themeColor = ThemeColor.BRIGHT;
   }
 
   public static synchronized Settings getInstance() {

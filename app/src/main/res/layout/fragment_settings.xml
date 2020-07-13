@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context=".SettingsFragment" android:id="@+id/fragment_settings">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp" android:layout_marginStart="16dp">
+        <Switch
+                android:textOff="C"
+                android:textOn="F"
+                android:paddingTop="15dp"
+                android:paddingLeft="40dp"
+                android:paddingRight="40dp"
+                android:paddingBottom="40dp"
+                android:text="Temperature C - F"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/settings_switch_temperature"/>
+        <Switch
+                android:textOff="m/s"
+                android:textOn="km/h"
+                android:padding="40dp"
+                android:text="Wind Speed m/s - km/h"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/settings_switch_wind_speed"/>
+        <Switch
+                android:textOff="mmHg"
+                android:textOn="hPa"
+                android:padding="40dp"
+                android:text="Pressure mmHg - hPa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/settings_switch_pressure"/>
+        <Switch
+                android:padding="40dp"
+                android:text="Theme Dark/Bright"
+                android:layout_width="match_parent"
+                android:id="@+id/settings_switch_theme"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_height="wrap_content"
+                tools:ignore="OnClick"/>
+        <Spinner
+                android:padding="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/settings_spinner_location"/>
+    </LinearLayout>
+
+</FrameLayout>

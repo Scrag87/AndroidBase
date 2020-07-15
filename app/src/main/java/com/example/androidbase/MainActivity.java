@@ -7,13 +7,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
- static {
-   Settings.getInstance();
- }
+  static {
+    Settings.getInstance();
+  }
 
   SettingsFragment settingsFragment;
   WeatherFragment weatherFragment;
   WeatherForecastFragment weatherForecastFragment;
+  MenuFragment menuFragment;
   String instanceState;
 
   @Override
@@ -28,9 +29,11 @@ public class MainActivity extends AppCompatActivity {
       }
       getSupportFragmentManager()
           .beginTransaction()
-          // сделал 2 фрагмента на одном экране а как отобразить weatherForecastFragment внизу пока не разобрался
+          // сделал 2 фрагмента на одном экране а как отобразить weatherForecastFragment внизу пока
+          // не разобрался
+          //          .add(R.id.fragment_container, menuFragment) //test
           .add(R.id.fragment_container, weatherFragment)
-          .add(R.id.fragment_container, weatherForecastFragment)
+          //          .add(R.id.fragment_container, weatherForecastFragment)
           .commit();
     }
 
@@ -53,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
 
     settingsFragment = new SettingsFragment();
     settingsFragment.setArguments(getIntent().getExtras());
+
+    menuFragment = new MenuFragment();
+    menuFragment.setArguments(getIntent().getExtras());
   }
 
   private void fillMap() {
@@ -76,13 +82,14 @@ public class MainActivity extends AppCompatActivity {
     Log.d(this.getClass().getName(), "onRestoreInstanceState");
   }
 
-
   @Override
   public void onBackPressed() {
     toMainFragments(new View(this));
-    weatherFragment.changeTheme(new View(this));
+    //    weatherFragment.changeTheme(new View(this));
     settingsFragment.saveSettings(new View(this));
-//    super.onBackPressed();
+    if (weatherFragment.isInLayout()) {
+      super.onBackPressed();
+    }
   }
 
   @Override
@@ -133,23 +140,40 @@ public class MainActivity extends AppCompatActivity {
     setContentView(R.layout.menu);
   }
 
-
-
   public void openSettingsFragment(View view) {
     // switch to setting fragment
     getSupportFragmentManager()
-            .beginTransaction()
-            .add(settingsFragment, "")
-            .replace(R.id.fragment_container, settingsFragment)
-            .commit();
+        .beginTransaction()
+        .add(settingsFragment, "")
+        .replace(R.id.fragment_container, settingsFragment)
+        .commit();
   }
 
   public void toMainFragments(View view) {
     getSupportFragmentManager()
-            .beginTransaction()
-            .remove(settingsFragment)
-            .add(R.id.fragment_container, weatherFragment)
-            .add(R.id.fragment_container, weatherForecastFragment)
-            .commit();
+        .beginTransaction()
+        .remove(settingsFragment)
+//        .remove(menuFragment)
+        .add(R.id.fragment_container, weatherFragment)
+        //            .add(R.id.fragment_container, weatherForecastFragment)
+        .commit();
+  }
+
+  public void toMainScreen(View view) {
+    Log.d("TAG", "toMainScreen: +");
+    menuFragment.okButtonHandler(view);
+    getSupportFragmentManager()
+        .beginTransaction()
+        .remove(menuFragment)
+        .add(R.id.fragment_container, weatherFragment)
+        .commit();
+  }
+
+  public void citySelector(View view) {
+    getSupportFragmentManager()
+        .beginTransaction()
+//        .add(menuFragment, "")
+        .replace(R.id.fragment_container, menuFragment)
+        .commit();
   }
 }

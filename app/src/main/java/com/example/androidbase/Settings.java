@@ -21,19 +21,44 @@ public class Settings {
   private Integer location;
   private final Map<Integer, String> locationMap;
 
-
   public Map<Integer, String> getLocationMap() {
     return locationMap;
   }
 
 
+  public String getLocationName() {
+    return locationMap.get(location);
+  }
   public Integer getLocation() {
     return location;
   }
 
-  public void setLocation(Integer location , String locationName) {
+  public void setLocation(Integer location, String locationName) {
     this.location = location;
-    this.locationMap.put(location,locationName);
+    this.locationMap.put(location, locationName);
+  }
+
+  public void setLocation(String locationName) {
+    for (Map.Entry<Integer, String> entry : locationMap.entrySet()) {
+      if (entry.getValue().equals(locationName)) {
+        location = entry.getKey();
+      }
+    }
+  }
+
+  public void addCity(String name) {
+    if (locationMap.containsValue(name)) {
+      return;
+    }
+    locationMap.put(getNextPos(), name);
+  }
+
+  public void delCity(String name) {
+    locationMap.values().remove(name);
+  }
+
+  private int getNextPos() {
+    return locationMap.size() + 1;
   }
 
   public boolean isTemperatureInF() {
@@ -75,7 +100,6 @@ public class Settings {
     }
     return uniqueInstance;
   }
-
 
   @Override
   public String toString() {

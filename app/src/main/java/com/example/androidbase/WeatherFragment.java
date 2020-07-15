@@ -67,7 +67,7 @@ public class WeatherFragment extends Fragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     Settings.getInstance();
-    fillMap();
+//    fillMap();
     if (getArguments() != null) {
       mParam1 = getArguments().getString(ARG_PARAM1);
       mParam2 = getArguments().getString(ARG_PARAM2);
@@ -108,7 +108,9 @@ public class WeatherFragment extends Fragment {
     } else {
       current_temperature_unit.setText("\u2103");
     }
-
+    // TODO: 7/14/20 
+    //    TextView textView = view.findViewById(R.id.city);
+    //    textView.setText(Settings.getInstance().getLocationName());
   }
 
   @Override

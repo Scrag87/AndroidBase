@@ -74,10 +74,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" app:srcCompat="@drawable/menu_bright"
                 android:id="@+id/menu_button"
+                android:onClick="citySelector"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginLeft="4dp" android:layout_marginStart="4dp" android:layout_marginTop="4dp"
-                android:contentDescription="@string/menu"/>
+                android:contentDescription="@string/menu" tools:ignore="OnClick"/>
         <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
